@@ -1,8 +1,10 @@
 language: bash
 
-service:
+services:
     - couchdb
 
+before_script:
+    - curl -X PUT localhost:5984/mapping
+
 script:
-    - curl -X PUT http://127.0.0.1:5984/mapping
-    - echo "looks fine"
+    - curl -X GET localhost:5984/mapping
