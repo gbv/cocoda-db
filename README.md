@@ -1,5 +1,8 @@
 # cocoda-db [![Build Status](https://travis-ci.org/gbv/cocoda.svg?branch=master)](https://travis-ci.org/gbv/cocoda-db)
 
+This repository contains a database backend for Colibri Concordance Database. 
+See also <https://github.com/gbv/cocoda> for a web client.
+
 ## Installation
 
     sudo apt-get install couchdb
