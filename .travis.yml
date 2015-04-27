@@ -1,0 +1,7 @@
+language: bash
+
+before_install:
+    - apt-get install couchdb
+
+script:
+    - echo "looks fine"
