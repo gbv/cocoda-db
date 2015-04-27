@@ -6,6 +6,7 @@ See also <https://github.com/gbv/cocoda> for a web client.
 ## Installation
 
     sudo apt-get install couchdb
+    curl -X PUT localhost:5984/mapping
 
 ## Development
 
