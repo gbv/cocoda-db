@@ -1,0 +1,27 @@
+importer:
+    JSKOS:
+        package: JSON
+        options:
+            multiline: 1
+store:
+    schemes:
+        package: MongoDB
+        options:
+            database_name: cocoda
+            default_bag: schemes
+    concepts:
+        package: MongoDB
+        options:
+            database_name: cocoda
+            default_bag: concepts
+    mappings:
+        package: MongoDB
+        options:
+            database_name: cocoda
+            default_bag: mappings
+exporter:
+    JSKOS:
+        package: JSON
+        options:
+            array: 1
+            pretty: 1
