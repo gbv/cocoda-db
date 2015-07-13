@@ -1,3 +1,10 @@
 *~
 local/
 data/
+*.deb
+debian/*.debhelper
+debian/*.log
+debian/*.substvars
+debian/files
+debian/*/
+logs/

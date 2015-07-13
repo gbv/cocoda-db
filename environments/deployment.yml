@@ -1,10 +1,12 @@
 # configuration file for production environment
 
-# only log warning and error messages
-log: "warning"
-
-# log message to a file in logs/
+# log to file with custom log format
 logger: "file"
+logger_format: "%T %L %D %h %m" 
+log_path: /var/log/cocoda-db
+
+# logging level (error, warning, info, debug, core)
+log: "info"
 
 # don't consider warnings critical
 warnings: 0
@@ -14,4 +16,3 @@ show_errors: 0
 
 # cache route resolution for maximum performance
 route_cache: 1
-

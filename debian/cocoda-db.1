@@ -1,0 +1,50 @@
+.TH "COCODA\-DB" "1" "" "Manual" ""
+.SH cocoda\-db [IMAGE: Build
+Status (https://travis-ci.org/gbv/cocoda.svg?branch=master)] (https://travis-ci.org/gbv/cocoda-db)
+.RS
+.PP
+Database service with JSKOS\-API
+.RE
+.SS Installation
+.PP
+\&...
+.SS Usage
+.SS Importing and exporting JSKOS
+.PP
+Right now JSKOS data can only be imported at the server via command
+line.
+Log in to base directory (\f[C]/srv/cocoda\-db\f[] after installation)
+and execute:
+.IP
+.nf
+\f[C]
+\&./catmandu\ import\ JSKOS\ to\ mappings\ <\ file.json
+\&./catmandu\ export\ mappings\ to\ JSKOS\ >\ file.json
+\f[]
+.fi
+.SS JSKOS\-API
+.PP
+After installation the JSKOS API is available at port 6033 (or port 5000
+during development).
+.SS Development
+.PP
+<https://github.com/gbv/cocoda-db>
+.SS Database
+.PP
+The internal database can be inspected and modified with any MongoDB
+client, for instance the command line client \f[C]mongo\f[]:
+.IP
+.nf
+\f[C]
+$\ mongo\ cocoda
+>\ ...
+\f[]
+.fi
+.PP
+Access restrictions may be added in a later version to avoid accidently
+damaging the database.
+.SS Tests
+.PP
+As configured in \f[C]\&.travis.yml\f[] the tests are automatically
+executed at travis\-ci (https://travis-ci.org/gbv/cocoda-db) when pushed
+to GitHub.

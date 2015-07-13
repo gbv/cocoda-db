@@ -3,6 +3,14 @@ importer:
         package: JSON
         options:
             multiline: 1
+            fix: perlcode(fixes/jskos-expand.pl)
+exporter:
+    JSKOS:
+        package: JSON
+        options:
+            array: 1
+            pretty: 1
+            fix: fixes/jskos-export.fix
 store:
     schemes:
         package: MongoDB
@@ -19,9 +27,3 @@ store:
         options:
             database_name: cocoda
             default_bag: mappings
-exporter:
-    JSKOS:
-        package: JSON
-        options:
-            array: 1
-            pretty: 1

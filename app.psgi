@@ -1,4 +1,5 @@
 use lib 'local/lib/perl5';
+use lib 'lib';
 
 use Dancer;
 use Plack::Builder;

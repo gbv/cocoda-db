@@ -1,0 +1,6 @@
+---
+engines:
+    JSON:
+        pretty: 1
+        canonical: 1
+serializer: JSON

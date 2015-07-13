@@ -1,15 +1,16 @@
 language: bash
-sudo: true
+sudo: false
+
+# apt packages required to install CPAN packages 
+addons:
+    apt:
+        packages:
+            - libc6
 
 services:
     - mongodb
 
-# install required packages on Ubuntu 12.04 which travis is still using
 before_script:
-    - sudo apt-get install libdancer-perl
-      # catmandu requirements (incomplete)
-    - sudo apt-get install libapp-cmd-perl libmodule-info-perl libyaml-libyaml-perl libjson-xs-perl libmoo-perl
-    - sudo apt-get install libc6 # for marpa
     - make local
 
 script:

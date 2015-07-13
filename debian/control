@@ -1,0 +1,41 @@
+Source: cocoda-db
+Section: misc
+Priority: extra
+Maintainer: Jakob Voß <jakob.voss@gbv.de>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.2
+ 
+Package: cocoda-db
+Architecture: any
+Depends: perl-base (>= 5.14.1),
+ mongodb,
+ libmongodb-perl,
+ starman, 
+ libapp-cmd-perl,
+ libclone-perl,
+ libconfig-any-perl,
+ libhash-merge-simple-perl,
+ libdata-compare-perl,
+ libdata-util-perl,
+ libdata-compare-perl, 
+ libdata-uuid-perl,
+ libfile-find-rule-perl,
+ libio-handle-util-perl,
+ libjson-xs-perl,
+ liblist-moreutils-perl,
+ liblog-any-perl,
+ liblog-any-adapter-perl,
+# marpa
+ libc6,
+ libhtml-parser-perl,
+ libmodule-info-perl,
+ libmoo-perl,
+ libnamespace-clean-perl,
+ libsub-exporter-perl,
+ libtext-csv-perl,
+ libthrowable-perl,
+ libyaml-libyaml-perl,
+ libdancer-perl,
+ libplack-middleware-crossorigin-perl
+Description: Database service with JSKOS-API
+
