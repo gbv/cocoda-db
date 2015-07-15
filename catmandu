@@ -1,2 +1,3 @@
 #!/bin/bash
+# Wrapper around catmandu command line client
 perl -Ilocal/lib/perl5 ./local/bin/catmandu $@

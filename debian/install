@@ -1,5 +1,6 @@
 app.psgi            srv/cocoda-db
 catmandu.yml        srv/cocoda-db
+catmandu            srv/cocoda-db
 config.yml          srv/cocoda-db
 lib/*               srv/cocoda-db/lib
 local/*             srv/cocoda-db/local
