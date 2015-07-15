@@ -69,6 +69,11 @@ Each entry in `deployment.log` starts with the following values
 
 Log messages may span multiple lines.
 
+## License
+
+cocoda-db is made available under the terms of GNU Affero General Public
+License (AGPL).
+
 ## Development
 
 The software is managed in a public git repository at
