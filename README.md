@@ -23,7 +23,9 @@ available at localhost on port 6033. The current version only supports a
 parameters:
 
 * `fromScheme` and `toScheme` to select concept schemes by URI
-* `fromConcept' and `toConcept` to select concepts by URI
+* `fromSchemeNotation` and `toSchemeNotation` to select concept schemes
+  by Notation
+* `from` and `to` to select concepts by URI
 * `fromNotation` and `toNotation` to select concepts by notations
 * `creator`, `publisher`, `contributor`, `source`, `provenance`
 * `dateAccepted`, `dateModified`

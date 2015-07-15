@@ -107,12 +107,14 @@ get '/mappings' => sub {
     
     # query fields
     my %fields = (
-        fromScheme   => 'from.inScheme.uri',
-        toScheme     => 'to.inScheme.uri',
-        fromNotation => 'from.conceptSet.notation',
-        toNotation   => 'to.conceptSet.notation',
-        fromConcept  => 'from.conceptSet.uri',
-        toConcept    => 'to.conceptSet.uri',
+        fromScheme         => 'from.inScheme.uri',
+        toScheme           => 'to.inScheme.uri',
+        fromSchemeNotation => 'from.inScheme.notation',
+        toSchemeNotation   => 'to.inScheme.notation',
+        fromNotation       => 'from.conceptSet.notation',
+        toNotation         => 'to.conceptSet.notation',
+        from               => 'from.conceptSet.uri',
+        to                 => 'to.conceptSet.uri',
         map { $_ => $_ } qw(creator publisher contributor source provenance dateAccepted dateModified),
     );
     my $query = {};
