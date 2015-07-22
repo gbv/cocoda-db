@@ -1,4 +1,4 @@
-# cocoda-db [![Build Status](https://travis-ci.org/gbv/cocoda.svg?branch=master)](https://travis-ci.org/gbv/cocoda-db)
+# cocoda-db
 
 This repository contains a database backend for Colibri Concordance Database. 
 See also <https://github.com/gbv/cocoda> for a web client.
@@ -40,5 +40,9 @@ damaging the database.
 
 ## Tests
 
+<<<<<<< HEAD
 Run `make tests` to run unit tests localted in directory `t`.
+=======
+Run `make tests` to run unit tests located in directory `t`.
+>>>>>>> f766620... disable travis-ci (Ubuntu too old)
 
