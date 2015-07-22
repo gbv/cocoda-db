@@ -8,9 +8,12 @@ Standards-Version: 3.9.2
 Package: cocoda-db
 Architecture: any
 Depends: perl-base (>= 5.14.1),
+ starman, 
+ libdancer-perl,
+# MongoDB
  mongodb,
  libmongodb-perl,
- starman, 
+# Catmandu
  libapp-cmd-perl,
  libclone-perl,
  libconfig-any-perl,
@@ -25,9 +28,6 @@ Depends: perl-base (>= 5.14.1),
  liblist-moreutils-perl,
  liblog-any-perl,
  liblog-any-adapter-perl,
-# marpa
- libc6,
- libhtml-parser-perl,
  libmodule-info-perl,
  libmoo-perl,
  libnamespace-clean-perl,
@@ -35,7 +35,9 @@ Depends: perl-base (>= 5.14.1),
  libtext-csv-perl,
  libthrowable-perl,
  libyaml-libyaml-perl,
- libdancer-perl,
+## Marpa
+ libc6,
+ libhtml-parser-perl,
+# CORS
  libplack-middleware-crossorigin-perl
 Description: Database service with JSKOS-API
-

@@ -21,7 +21,7 @@ case "$1" in
     purge)
         # Remove config files
         rm -rf /etc/$PACKAGE
-        rm -ff /etc/default/$PACKAGE
+        rm -f /etc/default/$PACKAGE
     ;;
 
     upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
