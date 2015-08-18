@@ -86,8 +86,8 @@ dependencies:
 
     sudo make dependencies
     make local
- 
-To run the web application locally on port 5000 for testing:
+
+Locally run the web application on port 5000 for testing:
 
     make run
 
