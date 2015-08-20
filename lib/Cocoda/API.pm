@@ -133,6 +133,14 @@ get '/mappings' => sub {
     return_hits($hits);
 };
 
+### CORS
+
+options qr{^/(mappings|schemes|concepts)?} => sub {
+    # TODO: remove content afterwards?
+    return { }
+};
+
+# TODO: other pathes as well
 
 ### Logging and error handling
 

@@ -10,6 +10,8 @@ builder {
     enable 'ConditionalGET';
     enable 'ETag';
     enable 'JSONP';
-    enable 'CrossOrigin', origins => '*';
+    enable 'CrossOrigin',
+        origins => '*',
+        expose_headers => [qw(Link X-Total-Count)];
     dance;
 };
