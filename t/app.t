@@ -14,10 +14,12 @@ my $base = decode_json($res->content);
 ok $base->{version}, 'has version';
 
 foreach my $method (qw(mappings)) {
-    my $path = $base->{$method};
+    my $path = $base->{$method}->{href};
     ok $path, "has $method";
     $res = $app->request(GET $path);
     is $res->code, 200, "$path OK";
+
+    # TODO: OPTIONS $path should return description document
 }
 
 #note explain $res->as_string;

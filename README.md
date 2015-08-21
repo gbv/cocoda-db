@@ -105,5 +105,11 @@ damaging the database.
 
 ## Tests
 
-Run `make tests` to run unit tests localted in directory `t`.
+Run all tests located in directory `t`. 
+
+    make tests
+
+To run a selected test, for instance `t/app.t`: 
+
+    perl -Ilib -Ilocal/lib/perl5 t/app.t
 

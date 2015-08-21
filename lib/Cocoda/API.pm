@@ -29,13 +29,21 @@ sub map_properties {
     });
 }
 
+my $description = {
+    schemes => {
+        href => 'schemes',
+    },
+    concepts => {
+        href => 'concepts',
+    },
+    mappings => {
+        href => 'mappings'
+    },
+    version => $VERSION
+};
+
 get '/' => sub {
-    {
-        version => $VERSION,
-        schemes => '/schemes',
-        concepts => '/concepts',
-        mappings => '/mappings',
-    }
+    $description
 };
 
 get '/schemes' => sub {
@@ -133,14 +141,13 @@ get '/mappings' => sub {
     return_hits($hits);
 };
 
-### CORS
+### CORS and OPTIONS
 
 options qr{^/(mappings|schemes|concepts)?} => sub {
-    # TODO: remove content afterwards?
-    return { }
+    header('Allow', 'GET, HEAD, OPTIONS');
+    my ($method) = splat;
+    return ($method ? $description->{$method} : $description);
 };
-
-# TODO: other pathes as well
 
 ### Logging and error handling
 

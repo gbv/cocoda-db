@@ -12,6 +12,8 @@ builder {
     enable 'JSONP';
     enable 'CrossOrigin',
         origins => '*',
-        expose_headers => [qw(Link X-Total-Count)];
+        headers => '*',
+        methods => [qw{GET HEAD OPTIONS}],
+        expose_headers => [qw(Link Server X-Total-Count)];
     dance;
 };
