@@ -8,11 +8,12 @@ use Cocoda::API;
 
 builder {
     enable 'ConditionalGET';
+    enable 'Head';
     enable 'ETag';
     enable 'JSONP';
     enable 'CrossOrigin',
         origins => '*',
-        headers => '*',
+        headers => ['Authorization'],
         methods => [qw{GET HEAD OPTIONS}],
         expose_headers => [qw(Link Server X-Total-Count)];
     dance;

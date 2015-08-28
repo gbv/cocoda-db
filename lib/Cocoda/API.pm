@@ -4,6 +4,28 @@ use Dancer ':syntax';
 use Catmandu ':load';
 
 our $VERSION="0.0.1";
+our $JSKOSAPI="0.0.1";
+
+our $ENDPOINTS = {
+    schemes => {
+        href => 'schemes',
+    },
+    concepts => {
+        href => 'concepts',
+    },
+    mappings => {
+        href => 'mappings',
+    },
+    types => {
+        href => 'types',
+    }
+};
+
+our $DESCRIPTION = {
+    version  => $VERSION,
+    jskosapi => $JSKOSAPI,
+};
+
 
 sub map_properties {
     my ($iter, $default) = @_;
@@ -29,23 +51,17 @@ sub map_properties {
     });
 }
 
-my $description = {
-    schemes => {
-        href => 'schemes',
-    },
-    concepts => {
-        href => 'concepts',
-    },
-    mappings => {
-        href => 'mappings'
-    },
-    version => $VERSION
-};
-
+# base URL
 get '/' => sub {
-    $description
+    return { %$DESCRIPTION, %$ENDPOINTS }
 };
 
+options '/' => sub {
+    header('Allow', 'GET, HEAD, OPTIONS');
+    return { %$DESCRIPTION, %$ENDPOINTS }
+};    
+
+# endpoints
 get '/schemes' => sub {
     state $bag = Catmandu->store('schemes')->bag;
     []
@@ -53,6 +69,11 @@ get '/schemes' => sub {
 
 get '/concepts' => sub {
     state $bag = Catmandu->store('concepts')->bag;
+    []
+};
+
+get '/types' => sub {
+    state $bag = Catmandu->store('types')->bag;
     []
 };
 
@@ -143,10 +164,13 @@ get '/mappings' => sub {
 
 ### CORS and OPTIONS
 
-options qr{^/(mappings|schemes|concepts)?} => sub {
+options qr{^/(mappings|schemes|concepts|types)} => sub {
     header('Allow', 'GET, HEAD, OPTIONS');
-    my ($method) = splat;
-    return ($method ? $description->{$method} : $description);
+    my ($endpoint) = splat;
+    return {
+        %$DESCRIPTION,
+        $endpoint => $ENDPOINTS->{$endpoint},
+    }
 };
 
 ### Logging and error handling

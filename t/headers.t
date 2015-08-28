@@ -13,4 +13,9 @@ is $res->code, 200, "200 Ok";
 is $res->header('Content-Type'), 'application/json', 'Content-Type';
 ok $res->header('ETag'), 'ETag';
 
+# HEAD
+$res = $app->request(HEAD '/');
+is $res->code, 200, "200 Ok";
+is $res->content, '', 'HEAD request';
+
 done_testing;

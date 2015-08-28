@@ -1,4 +1,4 @@
-# cocoda-db [![Build Status](https://travis-ci.org/gbv/cocoda.svg?branch=dev)](https://travis-ci.org/gbv/cocoda-db)
+# cocoda-db [![Build Status](https://travis-ci.org/gbv/cocoda.svg)](https://travis-ci.org/gbv/cocoda-db)
 
 > Database service with JSKOS-API
 
