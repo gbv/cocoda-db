@@ -1,0 +1,23 @@
+language: bash
+sudo: required
+
+# we don't use docker but this triggers travis-ci to provide Ubuntu 14.04
+services:
+    - docker
+before_install:
+    - lsb_release -a
+    - sudo apt-get update -qq
+install:
+    - sudo make dependencies
+    - make local
+script:    
+    - make package # implies make tests
+    - sudo dpkg -i cocoda-db_*.deb
+    - sudo service cocoda-db status
+    # TODO: test installed instance
+    # - docker pull ubuntu/trusty # set up another Ubuntu 14.04 in Docker
+    # - copy deb file into container
+    # - install in container and test
+    # - publish docker container
+
+# TODO: release packages for tagged versions on success

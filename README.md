@@ -1,4 +1,4 @@
-# cocoda-db
+# cocoda-db [![Build Status](https://travis-ci.org/gbv/cocoda.svg?branch=dev)](https://travis-ci.org/gbv/cocoda-db)
 
 > Database service with JSKOS-API
 
@@ -103,7 +103,7 @@ client, for instance the command line client `mongo`:
 Access restrictions may be added in a later version to avoid accidently
 damaging the database.
 
-## Tests
+### Tests
 
 Run all tests located in directory `t`. 
 
@@ -112,4 +112,13 @@ Run all tests located in directory `t`.
 To run a selected test, for instance `t/app.t`: 
 
     perl -Ilib -Ilocal/lib/perl5 t/app.t
+
+Tests are also run automatically for continuous integration
+[at travis-ci](https://travis-ci.org/gbv/cocoda-db) after push to GitHub.
+
+### Packaging and Release
+
+Create a Debian package
+
+    make package
 

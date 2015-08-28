@@ -32,13 +32,13 @@ debian/$(PACKAGE).1: README.md $(CONTROL)
 		-M title="$(shell echo $(PACKAGE) | tr a-z A-Z)(1) Manual" -o $@
 
 # build Debian package
-deb: debian/$(PACKAGE).1 version tests
+package: debian/$(PACKAGE).1 version tests
 	dpkg-buildpackage -b -us -uc -rfakeroot
 	mv ../$(PACKAGE)_$(VERSION)_*.deb .
 
 # install required toolchain and Debian packages
 dependencies:
-	apt-get install fakeroot dpkg-dev
+	apt-get install fakeroot dpkg-dev debhelper
 	apt-get install pandoc libghc-citeproc-hs-data 
 	apt-get install $(DEPENDS)
 
@@ -50,5 +50,6 @@ local: cpanfile
 run: local
 	plackup -Ilib -r app.psgi
 
+# run tests
 tests: local
 	prove -Ilocal/lib/perl5 -l -v
