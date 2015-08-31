@@ -52,4 +52,4 @@ run: local
 
 # run tests
 tests: local
-	prove -Ilocal/lib/perl5 -l -v
+	PLACK_ENV=tests	prove -Ilocal/lib/perl5 -l -v

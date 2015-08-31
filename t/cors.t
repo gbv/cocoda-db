@@ -4,8 +4,8 @@ use Plack::Test;
 use Plack::Util::Load;
 use HTTP::Request;
 
-$ENV{PLACK_ENV} = 'tests';
-my $app = Plack::Test->create( load_app('app.psgi') );
+my $env = $ENV{TEST_URL} || 'app.psgi';
+my $app = Plack::Test->create( load_app($env) );
 
 # request with Origin header
 sub CORS {
