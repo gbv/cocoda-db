@@ -5,7 +5,7 @@ use Catmandu ':load';
 
 use Cocoda::API::Modifiers;
 
-our $VERSION="0.0.1";
+our $VERSION="0.0.2";
 our $JSKOSAPI="0.1.0";
 
 our $CONFIG = {

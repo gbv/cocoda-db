@@ -19,26 +19,7 @@ try to force installation of after failed install:
 
 After installation a public [JSKOS API](https://gbv.github.io/jskos-api/) is
 available at localhost on port 6033. The current implementation does not fully
-conform a selected version of JSKOS API specification yet.
-
-The `/mappings` endpoint at <http://127.0.0.1/mappings> can be queried with the
-following query parameters:
-
-* `fromScheme` and `toScheme` to select concept schemes by URI
-* `fromSchemeNotation` and `toSchemeNotation` to select concept schemes
-  by Notation
-* `from` and `to` to select concepts by URI
-* `fromNotation` and `toNotation` to select concepts by notations
-* `creator`, `publisher`, `contributor`, `source`, `provenance`
-* `dateAccepted`, `dateModified`
- 
-The following general query parameters are supported as well:
-
-* `limit`
-* `page`
-* `unique`
-
-JSONP and CORS is also implemented.
+conform to JSKOS API specification 0.1.0 yet.
 
 ### Importing and exporting JSKOS
 

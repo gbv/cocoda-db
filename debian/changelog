@@ -1,3 +1,11 @@
+cocoda-db (0.0.2) unstable; urgency=medium
+
+  * Extended Link response headers
+  * Implemented missing endpoints
+  * Refer to JSKOS API 0.1.0
+
+ -- Jakob Voß <jakob.voss@gbv.de>  Mon, 31 Aug 2015 15:09:19 +0200
+
 cocoda-db (0.0.1) unstable; urgency=medium
 
   * Initial draft
