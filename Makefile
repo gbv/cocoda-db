@@ -44,7 +44,7 @@ dependencies:
 
 # install required Perl packages
 local: cpanfile
-	cpanm -l local --skip-satisfied --installdeps .
+	cpanm -l local --skip-satisfied --installdeps --notest .
 
 # run locally
 run: local
@@ -52,4 +52,4 @@ run: local
 
 # run tests
 tests: local
-	prove -Ilocal/lib/perl5 -l -v
+	PLACK_ENV=tests	prove -Ilocal/lib/perl5 -l -v

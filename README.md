@@ -6,11 +6,11 @@
 
 The software is released as Debian package and tested with Ubuntu 14.04 LTS. 
 
-To install required dependencies either use a package manager such as `gdebi`
-or force installation of missing dependencies after installation with
-`apt-get`:
+To install required dependencies either use a package manager such as `gdebi`,
+manually install dependencies (inspectable via `dpkg -I cocoda_db_*.deb`), or
+try to force installation of after failed install:
 
-    sudo dpkg -i cocoda-db_1.2.3_amd64.deb
+    sudo dpkg -i cocoda-db_X.Y.Z_amd64.deb   # change X.Y.Z to version
     sudo apt-get -f install
 
 ## Usage
@@ -18,9 +18,11 @@ or force installation of missing dependencies after installation with
 ### JSKOS-API
 
 After installation a public [JSKOS API](https://gbv.github.io/jskos-api/) is
-available at localhost on port 6033. The current version only supports a
-`/mappings` endpoint at <http://127.0.0.1/mappings> with the following query
-parameters:
+available at localhost on port 6033. The current implementation does not fully
+conform a selected version of JSKOS API specification yet.
+
+The `/mappings` endpoint at <http://127.0.0.1/mappings> can be queried with the
+following query parameters:
 
 * `fromScheme` and `toScheme` to select concept schemes by URI
 * `fromSchemeNotation` and `toSchemeNotation` to select concept schemes
@@ -36,7 +38,7 @@ The following general query parameters are supported as well:
 * `page`
 * `unique`
 
-JSONP is also implemented.
+JSONP and CORS is also implemented.
 
 ### Importing and exporting JSKOS
 
@@ -111,7 +113,7 @@ Run all tests located in directory `t`.
 
 To run a selected test, for instance `t/app.t`: 
 
-    perl -Ilib -Ilocal/lib/perl5 t/app.t
+    PLACK_ENV=tests perl -Ilib -Ilocal/lib/perl5 t/app.t
 
 Tests are also run automatically for continuous integration
 [at travis-ci](https://travis-ci.org/gbv/cocoda-db) after push to GitHub.

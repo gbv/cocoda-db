@@ -2,6 +2,8 @@ use v5.14.1;
 use Test::More;
 use Dancer::Test;
 
+plan skip_all => 'only local test' if $ENV{TEST_URL};
+
 use_ok 'Cocoda::API';
 
 foreach my $method (qw(HEAD GET OPTIONS)) {
