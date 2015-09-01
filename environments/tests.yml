@@ -1,4 +1,5 @@
-# configuration file for production environment
+# Dancer configuration file for test environment
+charset: 'UTF-8'
 
 # log to file with custom log format
 logger: "file"

@@ -3,135 +3,152 @@ use 5.14.1;
 use Dancer ':syntax';
 use Catmandu ':load';
 
-our $VERSION="0.0.1";
+use Cocoda::DB::Config;
+use Cocoda::API::Modifiers;
 
-sub map_properties {
-    my ($iter, $default) = @_;
+our $VERSION="0.0.3";
+our $JSKOSAPI="0.1.0";
 
-    my %properties = map { ($_ => 1) }
-                     split /\s*,\s*/,
-                     (param('properties') // $default // '');
+our $CONCEPT_SEARCH_FIELDS = {
+    map { $_ => $_ } qw(
+        uri type prefLabel altLabel hiddenLabel notation broader narrower related
+    ),
+    # TODO: label (any of prefLabel, altLabel, hiddenLabel)
+    # TODO: note (any kind of note)
+    scheme         => 'inScheme.uri',
+    schemeNotation => 'inScheme.notation',
+};
 
-    return $iter if !%properties or $properties{'*'};
+sub service_description {
+    my (@endpoints) = @_ ? @_ : qw(concepts schemes mappings types);
 
-    $properties{uri} = 1;
-    if ($properties{label}) {
-        $properties{$_} = 1 for qw(prefLabel altLabel hiddenLabel);
+    return {
+        version  => $VERSION,
+        jskosapi => $JSKOSAPI,
+        CONFIG(title => 'title'),
+        map {
+            $_ => {
+                CONFIG(href => "endpoints.$_.href"),
+                CONFIG(title => "endpoints.$_.title"),
+            }
+        } 
+        grep { CONFIG("endpoints.$_") }
+        @endpoints
     }
-
-    $iter->map(sub {
-        my $item = shift;
-        return {
-            map { $_ => $item->{$_} }
-            grep { defined $item->{$_} } 
-            keys %properties 
-        }
-    });
 }
 
+# base URL
 get '/' => sub {
-    {
-        version => $VERSION,
-        schemes => '/schemes',
-        concepts => '/concepts',
-        mappings => '/mappings',
+    return service_description;
+};
+
+options '/' => sub {
+    header('Allow', 'GET, HEAD, OPTIONS');
+    return service_description;
+};    
+
+my %endpoints = (
+    concepts => sub {
+        state $bag = Catmandu->store('concepts')->bag;
+        answer_query( $CONCEPT_SEARCH_FIELDS, $bag );
+    },
+    schemes => sub {
+        state $bag = Catmandu->store('schemes')->bag;
+        my $fields = {
+            map { $_ => $_ } 
+            qw(uri type prefLabel altLabel hiddenLabel notation),
+            # TODO: label (any of prefLabel, altLabel, hiddenLabel)
+        };
+        answer_query( $fields, $bag );
+    },
+    types => sub {
+        state $bag = Catmandu->store('types')->bag;
+        answer_query( $CONCEPT_SEARCH_FIELDS, $bag );
+    },
+    mappings => sub {
+        state $bag = Catmandu->store('mappings')->bag;
+
+        # query fields
+        my $fields = {
+            fromScheme         => 'from.inScheme.uri',
+            toScheme           => 'to.inScheme.uri',
+            fromSchemeNotation => 'from.inScheme.notation',
+            toSchemeNotation   => 'to.inScheme.notation',
+            fromNotation       => 'from.conceptSet.notation',
+            toNotation         => 'to.conceptSet.notation',
+            from               => 'from.conceptSet.uri',
+            to                 => 'to.conceptSet.uri',
+            map { $_ => $_ } qw(
+                creator 
+                publisher
+                contributor
+                source
+                provenance
+                dateAccepted
+                dateModified
+            ),
+        };
+        answer_query( $fields, $bag );
     }
-};
+);
 
-get '/schemes' => sub {
-    state $bag = Catmandu->store('schemes')->bag;
-    []
-};
-
-get '/concepts' => sub {
-    state $bag = Catmandu->store('concepts')->bag;
-    []
-};
-
-sub search_with_pagination {
-    my ($bag, $query) = @_;
+while (my ($name, $sub) = each %endpoints) {
+    my $href = CONFIG("endpoints.$name.href");
+    next if $href and $href =~ qr{^(https?:)?//};
     
-    # pagination
-    no warnings 'numeric', 'uninitialized';
-    my $page   = int(param 'page') || 1;
-    my $limit  = int(param 'limit') || 20; # TODO: configure value
-    if (param 'unique') {
-        $limit = 2;
-    } elsif ($limit > 1000) { # TODO: configure value
-        $limit = 1000;
-    }
+    get "/$href" => $sub;
 
-    # search
-    my $hits = $bag->search( 
-        query => $query,
-        start => ($page-1)*$limit,
-        limit => $limit,
-    );
+    options "/$href" => sub {
+        header('Allow', 'GET, HEAD, OPTIONS');
+        return service_description($name);
+    };
 }
 
-sub return_hits {
-    my ($hits) = @_;
-    
-    if (param 'unique') {
-        if ($hits->total == 1) {
-            $hits->first;
-        } elsif ($hits->total == 0) {
-            status(404);
-            { "error" => "not found" };
-        } else {
-            status(303);
-            { "error" => "multiple choices (parameter unique)" };
-        }
-    } else {
-        header('X-Total-Count' => $hits->total);
-        my $limit = $hits->limit; 
-        my ($next, $last) = ($hits->next_page, $hits->last_page);
-        my @links = (
-            "limit=$limit>; rel=\"first\"",
-            "page=$last&limit=$limit>; rel=\"last\"",
-        );
-        if ($next) {
-            push @links, "page=$next&limit=$limit>; rel=\"next\""
-        }
-        # TODO: use configured base URL and add additional query parameters
-        my $base = request->base."?";
-        header('Link' => join ', ', map { "<$base$_" } @links);
-        $hits->to_array;
-    }
-}
+sub answer_query { # TODO: move to another module
+    my ($fields, $bag) = @_;
 
-get '/mappings' => sub {
-    state $bag = Catmandu->store('mappings')->bag;
+    # TODO: language tags
 
-    # TODO: author
-    
-    # query fields
-    my %fields = (
-        fromScheme         => 'from.inScheme.uri',
-        toScheme           => 'to.inScheme.uri',
-        fromSchemeNotation => 'from.inScheme.notation',
-        toSchemeNotation   => 'to.inScheme.notation',
-        fromNotation       => 'from.conceptSet.notation',
-        toNotation         => 'to.conceptSet.notation',
-        from               => 'from.conceptSet.uri',
-        to                 => 'to.conceptSet.uri',
-        map { $_ => $_ } qw(creator publisher contributor source provenance dateAccepted dateModified),
-    );
+    # collect query fields
     my $query = {};
-    foreach (keys %fields) {
+    foreach (keys %$fields) {
         next unless defined param $_;
-        $query->{ $fields{$_} } = param $_;
+        $query->{ $fields->{$_} } = param $_;
     }
 
-    my $hits = search_with_pagination($bag, $query);
-    # TODO: build HTTP header links with total, start, limit, more
- 
-    # TODO: props of from and to instead
-    # TODO: use MongoDB projection instead (?)
-    $hits = map_properties($hits);
+    # search given bag with pagination
+    my $hits = do {
+        no warnings 'numeric', 'uninitialized';
+        my $page   = int(param 'page') || 1;
+        $page = 1 if $page < 1;
 
-    return_hits($hits);
-};
+        my $limit  = int(param 'limit') || CONFIG('limit.default');
+        $limit = 1 if $limit < 1;
+
+        if (param 'unique') {
+            $limit = 2;
+        } else {
+            my $max = CONFIG('limit.max');
+            $limit = $max if $max and $limit > $max;
+        }
+
+        # search
+        $bag->search( 
+            query => $query,
+            start => ($page-1)*$limit,
+            limit => $limit,
+        );
+    };
+
+    # filter to requested object properties    
+    # TODO: use MongoDB projection instead (?)
+    $hits = filter_properties($hits);
+
+    # TODO: implement 'list' modifier
+    # TODO: JSKOS expansion and normalization
+
+    return_paginated($query, $hits);
+}
 
 
 ### Logging and error handling
@@ -158,7 +175,7 @@ hook on_route_exception => sub {
     error $msg;
 
     # include stack trace on debug level
-    if (ref $exception->{stack_trace}) {
+    if (ref $exception and $exception->{stack_trace}) {
         debug $msg.$exception->{stack_trace}->as_string;
     }
 

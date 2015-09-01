@@ -27,28 +27,34 @@ ifeq ($(PANDOC),)
   PANDOC = $(error pandoc is required but not installed)
 endif
 
+manpage: debian/$(PACKAGE).1
 debian/$(PACKAGE).1: README.md $(CONTROL)
 	@grep -v '^\[!' $< | $(PANDOC) -s -t man -o $@ \
 		-M title="$(shell echo $(PACKAGE) | tr a-z A-Z)(1) Manual" -o $@
 
 # build Debian package
-deb: debian/$(PACKAGE).1 version tests
+package: debian/$(PACKAGE).1 version tests
 	dpkg-buildpackage -b -us -uc -rfakeroot
 	mv ../$(PACKAGE)_$(VERSION)_*.deb .
 
 # install required toolchain and Debian packages
 dependencies:
-	apt-get install fakeroot dpkg-dev
+	apt-get install fakeroot dpkg-dev debhelper
 	apt-get install pandoc libghc-citeproc-hs-data 
 	apt-get install $(DEPENDS)
 
 # install required Perl packages
 local: cpanfile
-	cpanm -l local --skip-satisfied --installdeps .
+	cpanm -l local --skip-satisfied --installdeps --notest .
 
 # run locally
 run: local
 	plackup -Ilib -r app.psgi
 
+# check sources for syntax errors
+code:
+	@find lib -iname '*.pm' -exec perl -c -Ilib -Ilocal/lib/perl5 {} \;
+
+# run tests
 tests: local
-	prove -Ilocal/lib/perl5 -l -v
+	PLACK_ENV=tests prove -Ilocal/lib/perl5 -l -v
