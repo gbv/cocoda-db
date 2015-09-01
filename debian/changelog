@@ -1,3 +1,11 @@
+cocoda-db (0.0.3) unstable; urgency=medium
+
+  * Introduced Config file /etc/cocoda-db/config.yml
+  * Fix access logging if running behind proxy
+  * Extended documentation
+
+ -- Jakob Voß <jakob.voss@gbv.de>  Tue, 01 Sep 2015 15:54:02 +0200
+
 cocoda-db (0.0.2) unstable; urgency=medium
 
   * Extended Link response headers
