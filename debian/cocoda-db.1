@@ -1,14 +1,44 @@
 .TH "COCODA\-DB" "1" "" "Manual" ""
-.SH cocoda\-db [IMAGE: Build
-Status (https://travis-ci.org/gbv/cocoda.svg?branch=master)] (https://travis-ci.org/gbv/cocoda-db)
-.RS
+.SH NAME
 .PP
-Database service with JSKOS\-API
-.RE
-.SS Installation
+cocoda\-db \- Database service implementing JSKOS\-API
+.SH SYNOPSIS
 .PP
-\&...
-.SS Usage
+The application is automatically started as service, listening on port
+6033
+.IP
+.nf
+\f[C]
+sudo\ service\ cocoda\-db\ {status|start|stop|restart}
+\f[]
+.fi
+.SH DESCRITPION
+.PP
+cocoda\-db provides a JSKOS API (https://gbv.github.io/jskos-api/)
+webservice.
+The current implementation partly implements JSKOS API specification
+0.1.0.
+.SH INSTALLATION
+.PP
+The software is released as Debian package for Ubuntu 14.04 LTS.
+Other Debian based distributions \f[I]might\f[] work too.
+Releases can be found at <https://github.com/gbv/gndaccess/releases>
+.PP
+To install required dependencies either use a package manager such as
+\f[C]gdebi\f[], manually install dependencies (inspectable via
+\f[C]dpkg\ \-I\ cocoda_db_*.deb\f[]), or try to force installation of
+after failed install:
+.IP
+.nf
+\f[C]
+sudo\ dpkg\ \-i\ ...\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ #\ install\ dependencies
+sudo\ dpkg\ \-i\ cocoda\-db_X.Y.Z_amd64.deb\ \ \ #\ change\ X.Y.Z
+sudo\ apt\-get\ \-f\ install\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ #\ repair
+\f[]
+.fi
+.PP
+After installation the service is available at localhost on port 6033.
+.SH ADMINISTRATION
 .SS Importing and exporting JSKOS
 .PP
 Right now JSKOS data can only be imported at the server via command
@@ -22,29 +52,66 @@ and execute:
 \&./catmandu\ export\ mappings\ to\ JSKOS\ >\ file.json
 \f[]
 .fi
-.SS JSKOS\-API
 .PP
-After installation the JSKOS API is available at port 6033 (or port 5000
-during development).
-.SS Development
+Note that JSKOS data is not validated or checked for completeness and
+duplicates!
+.SS Logging
 .PP
-<https://github.com/gbv/cocoda-db>
+Log files are written in \f[C]/var/log/cocoda\-db/\f[] and kept for 30
+day by default:
+.IP \[bu] 2
+\f[C]access.log\f[] \- HTTP request and responses in Apache Log Format
+.IP \[bu] 2
+\f[C]server.log\f[] \- Web server messages (when server was started and
+stopped)
+.IP \[bu] 2
+\f[C]deployment.log\f[] \- Error messages, warnings, and runtime
+information
+.PP
+Each entry in \f[C]deployment.log\f[] starts with the following values
+.IP \[bu] 2
+day
+.IP \[bu] 2
+time
+.IP \[bu] 2
+seconds since request
+.IP \[bu] 2
+IP address of the remote host
+.IP \[bu] 2
+log message
+.PP
+Log messages may span multiple lines.
 .SS Database
 .PP
-The internal database can be inspected and modified with any MongoDB
-client, for instance the command line client \f[C]mongo\f[]:
+The internal database \f[C]cocoda\f[] can be inspected and modified with
+any MongoDB client, for instance the command line client \f[C]mongo\f[]:
 .IP
 .nf
 \f[C]
 $\ mongo\ cocoda
 >\ ...
+>\ db.mappings.drop()
 \f[]
 .fi
 .PP
 Access restrictions may be added in a later version to avoid accidently
 damaging the database.
-.SS Tests
+.SS Configuration
 .PP
-As configured in \f[C]\&.travis.yml\f[] the tests are automatically
-executed at travis\-ci (https://travis-ci.org/gbv/cocoda-db) when pushed
-to GitHub.
+Config file \f[C]/etc/default/cocoda\-db\f[] only contains basic server
+configuration in form of simple key\-values pairs:
+.IP \[bu] 2
+\f[C]PORT\f[] \- port number (required, 6033 by default)
+.IP \[bu] 2
+\f[C]WORKERS\f[] \- number of parallel connections (required, 5 by
+default).
+.SH SEE ALSO
+.PP
+The source code of cocoda\-db is managed in a public git repository at
+<https://github.com/gbv/cocoda-db>.
+Please report bugs and feature request at
+<https://github.com/gbv/cocoda-db/issues>!
+.PP
+The Changelog is located in file \f[C]debian/changelog\f[].
+.PP
+Development guidelines are given in file \f[C]CONTRIBUTING.md\f[].

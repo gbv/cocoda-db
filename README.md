@@ -1,27 +1,40 @@
-# cocoda-db [![Build Status](https://travis-ci.org/gbv/cocoda.svg)](https://travis-ci.org/gbv/cocoda-db)
+# NAME
 
-> Database service with JSKOS-API
+cocoda-db - Database service implementing JSKOS-API
 
-## Installation
+[![Build Status](https://travis-ci.org/gbv/cocoda-db.svg?branch=master)](https://travis-ci.org/gbv/cocoda-db)
+[![Latest Release](https://img.shields.io/github/release/gbv/cocoda-db.svg)](https://github.com/gbv/cocoda-db/releases)
 
-The software is released as Debian package and tested with Ubuntu 14.04 LTS. 
+# SYNOPSIS
+
+The application is automatically started as service, listening on port 6033
+
+    sudo service cocoda-db {status|start|stop|restart}
+
+# DESCRITPION
+
+cocoda-db provides a [JSKOS API](https://gbv.github.io/jskos-api/) webservice.
+The current implementation partly implements JSKOS API specification 0.1.0.
+
+# INSTALLATION
+
+The software is released as Debian package for Ubuntu 14.04 LTS. Other Debian
+based distributions *might* work too. Releases can be found at
+<https://github.com/gbv/gndaccess/releases>
 
 To install required dependencies either use a package manager such as `gdebi`,
 manually install dependencies (inspectable via `dpkg -I cocoda_db_*.deb`), or
 try to force installation of after failed install:
 
-    sudo dpkg -i cocoda-db_X.Y.Z_amd64.deb   # change X.Y.Z to version
-    sudo apt-get -f install
+    sudo dpkg -i ...                         # install dependencies
+    sudo dpkg -i cocoda-db_X.Y.Z_amd64.deb   # change X.Y.Z
+    sudo apt-get -f install                  # repair
 
-## Usage
+After installation the service is available at localhost on port 6033. 
 
-### JSKOS-API
+# ADMINISTRATION
 
-After installation a public [JSKOS API](https://gbv.github.io/jskos-api/) is
-available at localhost on port 6033. The current implementation does not fully
-conform to JSKOS API specification 0.1.0 yet.
-
-### Importing and exporting JSKOS
+## Importing and exporting JSKOS
 
 Right now JSKOS data can only be imported at the server via command line. Log
 in to base directory (`/srv/cocoda-db` after installation) and execute:
@@ -32,9 +45,7 @@ in to base directory (`/srv/cocoda-db` after installation) and execute:
 Note that JSKOS data is not validated or checked for completeness and
 duplicates!
 
-## Administration
-
-### Logging
+## Logging
 
 Log files are written in `/var/log/cocoda-db/` and kept for 30 day by default:
 
@@ -52,29 +63,7 @@ Each entry in `deployment.log` starts with the following values
 
 Log messages may span multiple lines.
 
-## License
-
-cocoda-db is made available under the terms of GNU Affero General Public
-License (AGPL).
-
-## Development
-
-The software is managed in a public git repository at
-<https://github.com/gbv/cocoda-db>. 
-
-Please report bugs and feature request in the public issue tracker!
-
-For local usage and development clone the git repository and install
-dependencies:
-
-    sudo make dependencies
-    make local
-
-Locally run the web application on port 5000 for testing:
-
-    make run
-
-### Database
+## Database
 
 The internal database `cocoda` can be inspected and modified with any MongoDB
 client, for instance the command line client `mongo`:
@@ -86,22 +75,22 @@ client, for instance the command line client `mongo`:
 Access restrictions may be added in a later version to avoid accidently
 damaging the database.
 
-### Tests
+## Configuration
 
-Run all tests located in directory `t`. 
+Config file `/etc/default/cocoda-db` only contains basic server configuration
+in form of simple key-values pairs:
 
-    make tests
+* `PORT`    - port number (required, 6033 by default)
 
-To run a selected test, for instance `t/app.t`: 
+* `WORKERS` - number of parallel connections (required, 5 by default).
 
-    PLACK_ENV=tests perl -Ilib -Ilocal/lib/perl5 t/app.t
+# SEE ALSO
 
-Tests are also run automatically for continuous integration
-[at travis-ci](https://travis-ci.org/gbv/cocoda-db) after push to GitHub.
+The source code of cocoda-db is managed in a public git repository at
+<https://github.com/gbv/cocoda-db>. Please report bugs and feature request at
+<https://github.com/gbv/cocoda-db/issues>!
 
-### Packaging and Release
+The Changelog is located in file `debian/changelog`.
 
-Create a Debian package
-
-    make package
+Development guidelines are given in file `CONTRIBUTING.md`.
 

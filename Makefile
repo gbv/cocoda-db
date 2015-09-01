@@ -27,6 +27,7 @@ ifeq ($(PANDOC),)
   PANDOC = $(error pandoc is required but not installed)
 endif
 
+manpage: debian/$(PACKAGE).1
 debian/$(PACKAGE).1: README.md $(CONTROL)
 	@grep -v '^\[!' $< | $(PANDOC) -s -t man -o $@ \
 		-M title="$(shell echo $(PACKAGE) | tr a-z A-Z)(1) Manual" -o $@
