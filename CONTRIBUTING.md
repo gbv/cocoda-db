@@ -62,7 +62,7 @@ Run all tests located in directory `t`.
 
 To run a selected test, for instance `t/app.t`: 
 
-    PLACK_ENV=tests perl -Ilib -Ilocal/lib/perl5 t/app.t
+    perl -Ilib -Ilocal/lib/perl5 t/app.t
 
 ## Continuous Integration
 

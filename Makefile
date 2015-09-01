@@ -51,6 +51,10 @@ local: cpanfile
 run: local
 	plackup -Ilib -r app.psgi
 
+# check sources for syntax errors
+code:
+	@find lib -iname '*.pm' -exec perl -c -Ilib -Ilocal/lib/perl5 {} \;
+
 # run tests
 tests: local
-	PLACK_ENV=tests	prove -Ilocal/lib/perl5 -l -v
+	PLACK_ENV=tests prove -Ilocal/lib/perl5 -l -v

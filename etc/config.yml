@@ -1,0 +1,28 @@
+---
+
+# list of IPs or IP ranges to trust as proxy
+proxy:
+    - 127.0.0.1
+
+# limit parameter for pagination
+limit:
+    default: 20
+    max: 1000
+
+# Human-readble name of service
+# title: "…"
+
+# configuration of endpoints
+# * 'href' MUST NOT start with '/' or './' (but possibly with '//')
+# * human-readable title can be added with 'title'
+endpoints:
+    concepts: 
+        href: concepts
+#        title: "…"
+    schemes: 
+        href: schemes
+    types:
+        href: types
+    mappings:
+        href: mappings
+

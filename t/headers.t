@@ -10,7 +10,9 @@ my $app = Plack::Test->create( load_app($env) );
 # GET
 my $res = $app->request(GET '/');
 is $res->code, 200, "200 Ok";
-is $res->header('Content-Type'), 'application/json', 'Content-Type';
+like $res->header('Content-Type'), 
+    qr{^application/json(; charset=utf-8)?$}, 'Content-Type';
+
 ok $res->header('ETag'), 'ETag';
 
 # HEAD

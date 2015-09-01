@@ -30,7 +30,8 @@ try to force installation of after failed install:
     sudo dpkg -i cocoda-db_X.Y.Z_amd64.deb   # change X.Y.Z
     sudo apt-get -f install                  # repair
 
-After installation the service is available at localhost on port 6033. 
+After installation the service is available at localhost on port 6033. Better
+put the service behind a reverse proxy to enable SSL and nice URLs.
 
 # ADMINISTRATION
 
@@ -81,8 +82,9 @@ Config file `/etc/default/cocoda-db` only contains basic server configuration
 in form of simple key-values pairs:
 
 * `PORT`    - port number (required, 6033 by default)
-
 * `WORKERS` - number of parallel connections (required, 5 by default).
+
+Main configuration is located in `/etc/cocoda-db/config.yml` in YAML format.
 
 # SEE ALSO
 

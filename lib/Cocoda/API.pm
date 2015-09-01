@@ -3,39 +3,11 @@ use 5.14.1;
 use Dancer ':syntax';
 use Catmandu ':load';
 
+use Cocoda::DB::Config;
 use Cocoda::API::Modifiers;
 
-our $VERSION="0.0.2";
+our $VERSION="0.0.3";
 our $JSKOSAPI="0.1.0";
-
-our $CONFIG = {
-    pagination => {
-        default => 20,
-        max     => 1000,
-    },
-};
-
-set behind_proxy => 1; # TODO: config
-
-our $ENDPOINTS = {
-    schemes => {
-        href => 'schemes',
-    },
-    concepts => {
-        href => 'concepts',
-    },
-    mappings => {
-        href => 'mappings',
-    },
-    types => {
-        href => 'types',
-    }
-};
-
-our $DESCRIPTION = {
-    version  => $VERSION,
-    jskosapi => $JSKOSAPI,
-};
 
 our $CONCEPT_SEARCH_FIELDS = {
     map { $_ => $_ } qw(
@@ -47,63 +19,90 @@ our $CONCEPT_SEARCH_FIELDS = {
     schemeNotation => 'inScheme.notation',
 };
 
+sub service_description {
+    my (@endpoints) = @_ ? @_ : qw(concepts schemes mappings types);
+
+    return {
+        version  => $VERSION,
+        jskosapi => $JSKOSAPI,
+        CONFIG(title => 'title'),
+        map {
+            $_ => {
+                CONFIG(href => "endpoints.$_.href"),
+                CONFIG(title => "endpoints.$_.title"),
+            }
+        } 
+        grep { CONFIG("endpoints.$_") }
+        @endpoints
+    }
+}
+
 # base URL
 get '/' => sub {
-    return { %$DESCRIPTION, %$ENDPOINTS }
+    return service_description;
 };
 
 options '/' => sub {
     header('Allow', 'GET, HEAD, OPTIONS');
-    return { %$DESCRIPTION, %$ENDPOINTS }
+    return service_description;
 };    
 
-# endpoints
-get '/schemes' => sub {
-    state $bag = Catmandu->store('schemes')->bag;
-    my $fields = {
-        map { $_ => $_ } qw(uri type prefLabel altLabel hiddenLabel notation),
-        # TODO: label (any of prefLabel, altLabel, hiddenLabel)
+my %endpoints = (
+    concepts => sub {
+        state $bag = Catmandu->store('concepts')->bag;
+        answer_query( $CONCEPT_SEARCH_FIELDS, $bag );
+    },
+    schemes => sub {
+        state $bag = Catmandu->store('schemes')->bag;
+        my $fields = {
+            map { $_ => $_ } 
+            qw(uri type prefLabel altLabel hiddenLabel notation),
+            # TODO: label (any of prefLabel, altLabel, hiddenLabel)
+        };
+        answer_query( $fields, $bag );
+    },
+    types => sub {
+        state $bag = Catmandu->store('types')->bag;
+        answer_query( $CONCEPT_SEARCH_FIELDS, $bag );
+    },
+    mappings => sub {
+        state $bag = Catmandu->store('mappings')->bag;
+
+        # query fields
+        my $fields = {
+            fromScheme         => 'from.inScheme.uri',
+            toScheme           => 'to.inScheme.uri',
+            fromSchemeNotation => 'from.inScheme.notation',
+            toSchemeNotation   => 'to.inScheme.notation',
+            fromNotation       => 'from.conceptSet.notation',
+            toNotation         => 'to.conceptSet.notation',
+            from               => 'from.conceptSet.uri',
+            to                 => 'to.conceptSet.uri',
+            map { $_ => $_ } qw(
+                creator 
+                publisher
+                contributor
+                source
+                provenance
+                dateAccepted
+                dateModified
+            ),
+        };
+        answer_query( $fields, $bag );
+    }
+);
+
+while (my ($name, $sub) = each %endpoints) {
+    my $href = CONFIG("endpoints.$name.href");
+    next if $href and $href =~ qr{^(https?:)?//};
+    
+    get "/$href" => $sub;
+
+    options "/$href" => sub {
+        header('Allow', 'GET, HEAD, OPTIONS');
+        return service_description($name);
     };
-    answer_query( $fields, $bag );
-};
-
-get '/concepts' => sub {
-    state $bag = Catmandu->store('concepts')->bag;
-    answer_query( $CONCEPT_SEARCH_FIELDS, $bag );
-};
-
-get '/types' => sub {
-    state $bag = Catmandu->store('types')->bag;
-    answer_query( $CONCEPT_SEARCH_FIELDS, $bag );
-};
-
-
-get '/mappings' => sub {
-    state $bag = Catmandu->store('mappings')->bag;
-
-    # query fields
-    my $fields = {
-        fromScheme         => 'from.inScheme.uri',
-        toScheme           => 'to.inScheme.uri',
-        fromSchemeNotation => 'from.inScheme.notation',
-        toSchemeNotation   => 'to.inScheme.notation',
-        fromNotation       => 'from.conceptSet.notation',
-        toNotation         => 'to.conceptSet.notation',
-        from               => 'from.conceptSet.uri',
-        to                 => 'to.conceptSet.uri',
-        map { $_ => $_ } qw(
-            creator 
-            publisher
-            contributor
-            source
-            provenance
-            dateAccepted
-            dateModified
-        ),
-    };
-    answer_query( $fields, $bag );
-};
-
+}
 
 sub answer_query { # TODO: move to another module
     my ($fields, $bag) = @_;
@@ -123,13 +122,13 @@ sub answer_query { # TODO: move to another module
         my $page   = int(param 'page') || 1;
         $page = 1 if $page < 1;
 
-        my $limit  = int(param 'limit') || $CONFIG->{pagination}->{default};
+        my $limit  = int(param 'limit') || CONFIG('limit.default');
         $limit = 1 if $limit < 1;
 
         if (param 'unique') {
             $limit = 2;
         } else {
-            my $max = $CONFIG->{pagination}->{max};
+            my $max = CONFIG('limit.max');
             $limit = $max if $max and $limit > $max;
         }
 
@@ -151,17 +150,6 @@ sub answer_query { # TODO: move to another module
     return_paginated($query, $hits);
 }
 
-
-### CORS and OPTIONS
-
-options qr{^/(mappings|schemes|concepts|types)} => sub {
-    header('Allow', 'GET, HEAD, OPTIONS');
-    my ($endpoint) = splat;
-    return {
-        %$DESCRIPTION,
-        $endpoint => $ENDPOINTS->{$endpoint},
-    }
-};
 
 ### Logging and error handling
 

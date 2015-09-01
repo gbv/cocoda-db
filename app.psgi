@@ -2,11 +2,14 @@ use v5.14.1;
 use lib 'local/lib/perl5';
 use lib 'lib';
 
-use Dancer;
+use Dancer qw(set dance);
+use Cocoda::DB::Config;
 use Plack::Builder;
+
 use Cocoda::API;
 
 builder {
+    enable_if { CONFIG('proxy') } 'XForwardedFor', trust => CONFIG('proxy');
     enable 'ConditionalGET';
     enable 'Head';
     enable 'ETag';

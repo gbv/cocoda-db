@@ -7,6 +7,7 @@ our @EXPORT = qw(link_header filter_properties return_paginated);
 use URI;
 use URI::QueryParam;
 use Dancer ':syntax';
+use Cocoda::DB::Config;
 
 # Filter response to selected properties only
 sub filter_properties {
@@ -44,9 +45,9 @@ sub link_header {
 
     my @links;
 
-    # if ($hits->limit != $CONFIG->{pagination}->{default}) {
-    #    $url->query_param( limit => $hits->limit );
-    # }
+    if ($hits->limit != CONFIG->{limit}->{default}) {
+        $url->query_param( limit => $hits->limit );
+    }
 
     if ($hits->first_page < $hits->page) {
         $url->query_param( page => $hits->first_page );

@@ -11,7 +11,8 @@ my $app = Plack::Test->create( load_app($env) );
 # service description at base URL
 my $res = $app->request(HTTP::Request->new(GET => '/'));
 is $res->code, 200, 'GET / OK';
-is $res->header('Content-Type'), 'application/json', 'JSON';
+like $res->header('Content-Type'), 
+    qr{^application/json(; charset=utf-8)?$}, 'JSON';
 
 my $service = decode_json($res->content);
 like $service->{'jskosapi'}, qr{^\d+\.\d+\.\d+$}, 'jskosapi';
@@ -23,7 +24,8 @@ foreach (qw(concepts schemes mappings types)) {
     
     my $res  = $app->request(HTTP::Request->new(OPTIONS => $path));
     is $res->code, 200, "OPTIONS";
-    is $res->header('Content-Type'), 'application/json', 'JSON';
+    like $res->header('Content-Type'), 
+        qr{^application/json(; charset=utf-8)?$}, 'JSON';
     is $res->header('Allow'), 'GET, HEAD, OPTIONS', 'Allow'; 
 
     my $s = decode_json($res->content);
