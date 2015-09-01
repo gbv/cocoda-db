@@ -19,4 +19,17 @@ script:
     - sudo service cocoda-db status
     # test against localhost
     - export TEST_URL=6033
-    - prove -Ilocal/lib/perl5 -v # requires Plack::Util::Load and JSON 
+    - prove -Ilocal/lib/perl5 -v # requires Plack::Util::Load and JSOe 
+
+# Release Debian package via GitHub releases on tagged commits
+before_deploy:
+    - export RELEASE_FILE=$(ls *.deb)
+    - echo "deploying $RELEASE_FILE to GitHub releases"
+deploy:
+    provider: releases
+    api_key:
+        secure: o9F+7dLe2rsjfn+OtHlUi7ARJFahtq59XMr6ah0KXcdCUe6Smq3qJTbBKxKUhqWkTTXESUTw89Dn2rbUreQmZFb3thpP8mvwQIHjSTsViP2Gp8HIgvhYdm1oCnQJSSUYJ1czJbOf2c4N65VICx0iaOLqT8egRTZsJhEewHpaIEo=
+    file_glob: true
+    file: "${RELEASE_FILE}"
+    on:
+        tags: true
