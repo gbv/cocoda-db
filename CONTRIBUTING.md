@@ -52,7 +52,7 @@ Relevant source code is located in
       (only installed with first installation)
     * `install` - lists which files to install
 * `cpanfile` - lists required Perl modules
-* `htdocs/` - static HTML/CSS/JS/... files
+* `app.psgi` - application main script
 
 ## Tests
 

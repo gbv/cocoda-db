@@ -11,7 +11,7 @@ before_install:
 install:
     - sudo make dependencies
     - make local
-script:    
+script:  
     # make test and create Debian package
     - make package
     # locally install package
@@ -19,7 +19,7 @@ script:
     - sudo service cocoda-db status
     # test against localhost
     - export TEST_URL=6033
-    - prove -Ilocal/lib/perl5 -v # requires Plack::Util::Load and JSOe 
+    - prove -Ilocal/lib/perl5 -v # requires Plack::Util::Load and JSON 
 
 # Release Debian package via GitHub releases on tagged commits
 before_deploy:
