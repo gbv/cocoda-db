@@ -22,7 +22,8 @@ start () {
         exit 5
     fi
     cd /srv/$PACKAGE
-    starman --pid $PIDFILE --daemonize \
+    perl -Ilib -Ilocal/lib/perl5 `which starman` \
+        --pid $PIDFILE --daemonize \
         --workers $WORKERS --port $PORT --user $PACKAGE \
         --error-log /var/log/$PACKAGE/server.log \
         --access-log /var/log/$PACKAGE/access.log \

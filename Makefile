@@ -49,7 +49,7 @@ local: cpanfile
 
 # run locally
 run: local
-	plackup -Ilib -r app.psgi
+	plackup -Ilib -Ilocal/lib/perl5 -r app.psgi
 
 # check sources for syntax errors
 code:
@@ -57,4 +57,5 @@ code:
 
 # run tests
 tests: local
+	git ls-files --others t/ | xargs rm -f
 	PLACK_ENV=tests prove -Ilocal/lib/perl5 -l -v
