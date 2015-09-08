@@ -20,7 +20,7 @@ The current implementation partly implements JSKOS API specification 0.1.0.
 
 The software is released as Debian package for Ubuntu 14.04 LTS. Other Debian
 based distributions *might* work too. Releases can be found at
-<https://github.com/gbv/gndaccess/releases>
+<https://github.com/gbv/cocoda-db/releases>
 
 To install required dependencies either use a package manager such as `gdebi`,
 manually install dependencies (inspectable via `dpkg -I cocoda_db_*.deb`), or
