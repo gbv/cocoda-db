@@ -45,7 +45,7 @@ sub link_header {
 
     my @links;
 
-    if ($hits->limit != CONFIG->{limit}->{default}) {
+    if ($hits->limit != CONFIG('limit.default'))) {
         $url->query_param( limit => $hits->limit );
     }
 

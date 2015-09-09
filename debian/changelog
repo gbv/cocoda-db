@@ -1,3 +1,9 @@
+cocoda-db (0.0.4) unstable; urgency=medium
+
+  * fixed bug in access to config 
+
+ -- Jakob Voß <jakob.voss@gbv.de>  Wed, 09 Sep 2015 12:14:26 +0200
+
 cocoda-db (0.0.3) unstable; urgency=medium
 
   * Introduced Config file /etc/cocoda-db/config.yml

@@ -6,7 +6,7 @@ use Catmandu ':load';
 use Cocoda::DB::Config;
 use Cocoda::API::Modifiers;
 
-our $VERSION="0.0.3";
+our $VERSION="0.0.4";
 our $JSKOSAPI="0.1.0";
 
 our $CONCEPT_SEARCH_FIELDS = {
