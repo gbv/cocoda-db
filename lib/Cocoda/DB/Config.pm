@@ -28,8 +28,9 @@ BEGIN {
 # local instance configuration
 # Call as CONFIG(path) or CONFIG(key => path).
 sub CONFIG {
-    my $v = config->{etc};
-    $v = $v->{$_} // return () for split '\.', pop;
+    my $v = config->{etc} // { };
+    my $path = pop;
+    $v = $v->{$_} // return () for split '\.', $path;
     return (@_ ? ($_[0] => $v) : $v);
 }
 
