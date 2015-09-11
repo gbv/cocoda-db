@@ -28,6 +28,7 @@ properties:
     endpoints:
         required: 1
         type: object
+        additionalProperties: false
         properties:
             concepts:
                 required: 0
