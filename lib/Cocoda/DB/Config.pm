@@ -3,22 +3,25 @@ use v5.14.1;
 
 use Dancer qw(set config);
 use YAML ();
+use JSON::Schema;
+use Try::Tiny;
 
 use parent 'Exporter';
 our @EXPORT = qw(CONFIG);
 
 # load instance config before compilation of Cocoda::API
 BEGIN {
-    my ($file) = grep { -f $_ } qw(etc/config.yml /etc/cocoda-db/config.yml);
-    my $etc = eval { YAML::LoadFile($file) }
-           or die "Unable to parse the configuration file: $file: $@";
+    my $file = $ENV{COCODA_DB_CONF} //
+        (-f 'etc/config.yml' ? 'etc/config.yml' : '/etc/cocoda-db/config.yml');
 
-    # set possibly missing default values
-    my $endpoints = $etc->{endpoints};
-    foreach (qw(concepts schemes types mappings)) {
-        if ($endpoints->{$_} and !defined $endpoints->{$_}->{href}) {
-            $endpoints->{$_}->{href} = $_;
-        }
+    my $etc = try { YAML::LoadFile($file) }
+              catch { die "Failed to load configuration file $file: $_\n" };
+
+    # validate config file
+    my $schema = YAML::LoadFile("config-schema.yml");
+    my $result = JSON::Schema->new($schema)->validate($etc);
+    unless ($result) {
+        die join "\n", "Invalid configuration file $file", $result->errors, '';
     }
 
     set etc => $etc;

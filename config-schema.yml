@@ -1,0 +1,72 @@
+---
+description: JSON Schema of cocoda-db config file
+type: object
+properties:
+
+    port:
+        required: 0
+        type: array
+        items:
+            - type: string
+
+    limit:
+        type: object
+        properties:
+            default:
+                required: 1
+                type: integer
+                minimum: 1
+            max:
+                required: 1
+                type: integer
+                minimum: 1
+
+    title:
+        required: 0
+        type: string
+
+    endpoints:
+        required: 1
+        type: object
+        properties:
+            concepts:
+                required: 0
+                type: object
+                properties:
+                    href:
+                        required: 1
+                        type: string
+                    title:
+                        required: 0
+                        type: string
+            schemes:
+                required: 0
+                type: object
+                properties:
+                    href:
+                        required: 1
+                        type: string
+                    title:
+                        required: 0
+                        type: string
+            types:
+                required: 0
+                type: object
+                properties:
+                    href:
+                        required: 1
+                        type: string
+                    title:
+                        required: 0
+                        type: string
+            mappings:
+                required: 0
+                type: object
+                properties:
+                    href:
+                        required: 1
+                        type: string
+                    title:
+                        required: 0
+                        type: string
+

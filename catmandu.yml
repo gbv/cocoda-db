@@ -22,6 +22,11 @@ store:
         options:
             database_name: cocoda
             default_bag: concepts
+    types:
+        package: MongoDB
+        options:
+            database_name: cocoda
+            default_bag: types
     mappings:
         package: MongoDB
         options:

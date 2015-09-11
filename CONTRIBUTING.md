@@ -54,6 +54,15 @@ Relevant source code is located in
 * `cpanfile` - lists required Perl modules
 * `app.psgi` - application main script
 
+## Configuration
+
+Configuration is loaded from `etc/config.yml` if this file exists or
+`/etc/cocoda-db/config.yml` otherwise. A different file can be enforced with
+environment variable `COCODA_DB_CONF`.
+
+The configuration format should be restricted by JSON schema
+`config-schema.yml` to early catch configuration file errors.
+
 ## Tests
 
 Run all tests located in directory `t`. 
