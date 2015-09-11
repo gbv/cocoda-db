@@ -63,6 +63,10 @@ environment variable `COCODA_DB_CONF`.
 The configuration format should be restricted by JSON schema
 `config-schema.yml` to early catch configuration file errors.
 
+Config file `config.yml` is required by Dancer.
+
+Config file `catmandu.yml` is required by Catmandu.
+
 ## Tests
 
 Run all tests located in directory `t`. 
