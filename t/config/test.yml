@@ -4,12 +4,12 @@ limit:
     max: 10
 endpoints:
     concepts: 
-        href: concepts
+        href: c
     schemes: 
-        href: schemes
+        href: s
     types:
-        href: types
+        href: t
     mappings:
-        href: mappings
+        href: m
 
 _catmandu: t/config/
