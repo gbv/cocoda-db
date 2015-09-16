@@ -72,7 +72,7 @@ sub link_header {
 
 # page, limit, unique
 sub return_paginated {    
-    my ($query, $hits) = @_;
+    my ($query, $hits, $map) = @_;
 
     if (param 'unique') {
         if ($hits->total == 1) {
@@ -87,6 +87,7 @@ sub return_paginated {
     } else {
         header('X-Total-Count' => $hits->total);
         header('Link', link_header( request->base, $query, $hits ));
+        $hits = $hits->map($map) if $map;
         $hits->to_array;
     }
 }

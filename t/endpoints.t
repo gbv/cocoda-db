@@ -20,9 +20,6 @@ foreach (qw(concepts schemes types mappings)) {
     like $res->header('Content-Type'), 
         qr{^application/json(; charset=utf-8)?$}, 'JSON';
     is_deeply( decode_json($res->content), [], 'empty' );
-
-    # TODO: import stuff for testing
-    #  Catmandu->store($_)->delete_all;
 }
 
 done_testing;

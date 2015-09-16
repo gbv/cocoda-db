@@ -8,4 +8,5 @@ lib/*               srv/cocoda-db/lib
 local/*             srv/cocoda-db/local
 environments/*      srv/cocoda-db/environments
 fixes/*             srv/cocoda-db/fixes
+example/*           srv/cocoda-db/example
 README.md           usr/share/doc/cocoda-db

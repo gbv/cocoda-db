@@ -10,7 +10,7 @@ exporter:
         options:
             array: 1
             pretty: 1
-            fix: fixes/jskos-export.fix
+            fix: perlcode(fixes/jskos-export.pl)
 store:
     schemes:
         package: MongoDB

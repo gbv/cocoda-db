@@ -1,3 +1,16 @@
+importer:
+    JSKOS:
+        package: JSON
+        options:
+            multiline: 1
+            fix: perlcode(fixes/jskos-expand.pl)
+exporter:
+    JSKOS:
+        package: JSON
+        options:
+            array: 1
+            pretty: 1
+            fix: perlcode(fixes/jskos-export.pl)
 store:
     foo:
         package: MongoDB

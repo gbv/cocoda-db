@@ -40,11 +40,17 @@ put the service behind a reverse proxy to enable SSL and nice URLs.
 Right now JSKOS data can only be imported at the server via command line. Log
 in to base directory (`/srv/cocoda-db` after installation) and execute:
 
-    ./catmandu import JSKOS to mappings < file.json
-    ./catmandu export mappings to JSKOS > file.json
+    ./catmandu import JSKOS to concepts < jskos-concepts.json
+    ./catmandu export concepts to JSKOS > jskos-concepts.json
 
-Note that JSKOS data is not validated or checked for completeness and
-duplicates!
+Note that JSKOS data is currently not validated or checked for completeness and
+duplicates! You should also add information about concept schemes and concept
+types that imported concepts belong to:
+
+    ./catmandu import JSKOS to schemes < jskos-schemes.json
+    ./catmandu import JSKOS to types < jskos-types.json
+
+The `example` directory contains a sample KOS for testing.
 
 ## Logging
 

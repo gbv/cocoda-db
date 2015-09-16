@@ -20,6 +20,8 @@ our $CONCEPT_SEARCH_FIELDS = {
     schemeNotation => 'inScheme.notation',
 };
 
+my $jskos_export_fix = do 'fixes/jskos-export.pl';
+
 sub service_description {
     my (@endpoints) = @_ ? @_ : qw(concepts schemes mappings types);
 
@@ -148,7 +150,7 @@ sub answer_query { # TODO: move to another module
     # TODO: implement 'list' modifier
     # TODO: JSKOS expansion and normalization
 
-    return_paginated($query, $hits);
+    return_paginated($query, $hits, $jskos_export_fix);
 }
 
 
