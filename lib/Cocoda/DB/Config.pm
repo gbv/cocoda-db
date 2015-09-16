@@ -1,10 +1,11 @@
 package Cocoda::DB::Config;
 use v5.14.1;
 
-use Dancer qw(set config);
+use Dancer qw(set config debug);
 use YAML ();
 use JSON::Schema;
 use Try::Tiny;
+use Catmandu;
 
 use parent 'Exporter';
 our @EXPORT = qw(CONFIG);
@@ -24,13 +25,21 @@ BEGIN {
         die join "\n", "Invalid configuration file $file", $result->errors, '';
     }
 
+    debug "Using config file $file\n";
+
+    for (grep {defined} $etc->{_catmandu}) {
+        debug "Using catmandu config path $_"; 
+        Catmandu->default_load_path($_);
+    }
+
     set etc => $etc;
     set behind_proxy => 1 if $etc->{proxy};
 }
 
+
 # local instance configuration
 # Call as CONFIG(path) or CONFIG(key => path).
-sub CONFIG {
+sub CONFIG($;$) {
     my $v = config->{etc} // { };
     my $path = pop;
     $v = $v->{$_} // return () for split '\.', $path;

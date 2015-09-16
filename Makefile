@@ -55,7 +55,9 @@ run: local
 code:
 	@find lib -iname '*.pm' -exec perl -c -Ilib -Ilocal/lib/perl5 {} \;
 
+clean:
+	git ls-files --others t/ | xargs rm -f
+
 # run tests
 tests: local
-	git ls-files --others t/ | xargs rm -f
 	PLACK_ENV=tests prove -Ilocal/lib/perl5 -l -v

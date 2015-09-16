@@ -1,0 +1,15 @@
+---
+limit:
+    default: 2
+    max: 10
+endpoints:
+    concepts: 
+        href: concepts
+    schemes: 
+        href: schemes
+    types:
+        href: types
+    mappings:
+        href: mappings
+
+_catmandu: t/config/

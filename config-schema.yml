@@ -10,6 +10,7 @@ properties:
             - type: string
 
     limit:
+        required: 1
         type: object
         properties:
             default:
@@ -70,4 +71,9 @@ properties:
                     title:
                         required: 0
                         type: string
+
+    # catmandu config path
+    catmandu:
+        required: 0
+        type: string
 

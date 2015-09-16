@@ -1,5 +1,6 @@
 use v5.14;
 use Test::More;
+use Plack::Test;
 use Plack::Util::Load;
 
 plan skip_all => 'only local test' if $ENV{TEST_URL};

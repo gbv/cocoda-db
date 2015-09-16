@@ -1,9 +1,10 @@
 package Cocoda::API;
 use 5.14.1;
 use Dancer ':syntax';
-use Catmandu ':load';
 
 use Cocoda::DB::Config;
+use Catmandu;
+
 use Cocoda::API::Modifiers;
 
 our $VERSION="0.0.4";

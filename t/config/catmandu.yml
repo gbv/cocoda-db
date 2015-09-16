@@ -1,0 +1,26 @@
+store:
+    foo:
+        package: MongoDB
+        options:
+            database_name: test-cocoda-db
+            default_bag: schemes
+    schemes:
+        package: MongoDB
+        options:
+            database_name: test-cocoda-db
+            default_bag: schemes
+    concepts:
+        package: MongoDB
+        options:
+            database_name: test-cocoda-db
+            default_bag: concepts
+    types:
+        package: MongoDB
+        options:
+            database_name: test-cocoda-db
+            default_bag: types
+    mappings:
+        package: MongoDB
+        options:
+            database_name: test-cocoda-db
+            default_bag: mappings
