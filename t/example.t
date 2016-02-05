@@ -17,7 +17,7 @@ my @endpoints = qw(concepts schemes types mappings);
 
 # import stuff for testing
 {
-    my $in = importer('JSKOS', file => 'example/jskos-schemes.json')->to_array;
+    my $in = importer('JSKOS', file => 'examples/jskos-schemes.json')->to_array;
     my $expect = clone($in);
 
     store('schemes')->delete_all;
@@ -30,7 +30,7 @@ my @endpoints = qw(concepts schemes types mappings);
 }
 
 {
-    my $in = importer('JSKOS', file => 'example/jskos-concepts.json')->to_array;
+    my $in = importer('JSKOS', file => 'examples/jskos-concepts.json')->to_array;
     store('concepts')->add_many($in);
     my $res = $app->request(GET "/c");
 
