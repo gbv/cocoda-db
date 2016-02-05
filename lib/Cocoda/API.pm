@@ -3,7 +3,7 @@ use 5.14.1;
 use Dancer ':syntax';
 
 use Cocoda::DB::Config;
-use Catmandu;
+use Catmandu '-load';
 
 use Cocoda::API::Modifiers;
 

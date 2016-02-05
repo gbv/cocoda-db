@@ -50,7 +50,7 @@ types that imported concepts belong to:
     ./catmandu import JSKOS to schemes < jskos-schemes.json
     ./catmandu import JSKOS to types < jskos-types.json
 
-The `example` directory contains a sample KOS for testing.
+The `examples` directory contains KOS samples to start with.
 
 ## Logging
 
