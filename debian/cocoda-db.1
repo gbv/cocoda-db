@@ -22,7 +22,7 @@ The current implementation partly implements JSKOS API specification
 .PP
 The software is released as Debian package for Ubuntu 14.04 LTS.
 Other Debian based distributions \f[I]might\f[] work too.
-Releases can be found at <https://github.com/gbv/gndaccess/releases>
+Releases can be found at <https://github.com/gbv/cocoda-db/releases>
 .PP
 To install required dependencies either use a package manager such as
 \f[C]gdebi\f[], manually install dependencies (inspectable via
@@ -38,6 +38,8 @@ sudo\ apt\-get\ \-f\ install\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ #\ repair
 .fi
 .PP
 After installation the service is available at localhost on port 6033.
+Better put the service behind a reverse proxy to enable SSL and nice
+URLs.
 .SH ADMINISTRATION
 .SS Importing and exporting JSKOS
 .PP
@@ -105,6 +107,9 @@ configuration in form of simple key\-values pairs:
 .IP \[bu] 2
 \f[C]WORKERS\f[] \- number of parallel connections (required, 5 by
 default).
+.PP
+Main configuration is located in \f[C]/etc/cocoda\-db/config.yml\f[] in
+YAML format.
 .SH SEE ALSO
 .PP
 The source code of cocoda\-db is managed in a public git repository at

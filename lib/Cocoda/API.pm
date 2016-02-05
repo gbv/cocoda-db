@@ -7,7 +7,7 @@ use Catmandu '-load';
 
 use Cocoda::API::Modifiers;
 
-our $VERSION="0.0.4";
+our $VERSION="0.0.5";
 our $JSKOSAPI="0.1.0";
 
 our $CONCEPT_SEARCH_FIELDS = {

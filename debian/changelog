@@ -1,3 +1,10 @@
+cocoda-db (0.0.5) unstable; urgency=medium
+
+  * Fixed bug in startup script
+  * Extented configuration
+
+ -- Jakob Voß <jakob.voss@gbv.de>  Fri, 05 Feb 2016 09:52:33 +0100
+
 cocoda-db (0.0.4) unstable; urgency=medium
 
   * fixed bug in access to config 
