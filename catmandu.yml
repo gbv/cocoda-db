@@ -3,7 +3,6 @@ importer:
         package: JSON
         options:
             multiline: 1
-            fix: perlcode(fixes/jskos-expand.pl)
 exporter:
     JSKOS:
         package: JSON

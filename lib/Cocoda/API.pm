@@ -77,10 +77,10 @@ my %endpoints = (
             toScheme           => 'to.inScheme.uri',
             fromSchemeNotation => 'from.inScheme.notation',
             toSchemeNotation   => 'to.inScheme.notation',
-            fromNotation       => 'from.conceptSet.notation',
-            toNotation         => 'to.conceptSet.notation',
-            from               => 'from.conceptSet.uri',
-            to                 => 'to.conceptSet.uri',
+            fromNotation       => 'from.members.notation',
+            toNotation         => 'to.members.notation',
+            from               => 'from.members.uri',
+            to                 => 'to.members.uri',
             map { $_ => $_ } qw(
                 creator 
                 publisher
