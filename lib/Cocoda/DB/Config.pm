@@ -3,9 +3,9 @@ use v5.14.1;
 
 use Dancer qw(set config debug);
 use YAML ();
-use JSON::Schema;
 use Try::Tiny;
 use Catmandu;
+use Catmandu::Validator::JSONSchema;
 
 use parent 'Exporter';
 our @EXPORT = qw(CONFIG);
@@ -19,12 +19,17 @@ BEGIN {
               catch { die "Failed to load configuration file $file: $_\n" };
 
     # validate config file
+    # FIXME: https://github.com/LibreCat/Catmandu/issues/236
+=cut
     my $schema = YAML::LoadFile("config-schema.yml");
-    my $result = JSON::Schema->new($schema)->validate($etc);
+    my $validator = Catmandu::Validator::JSONSchema->new(schema => $schema);
+    my $result = $validator->validate($etc);
+    
     unless ($result) {
-        die join "\n", "Invalid configuration file $file", $result->errors, '';
+        my @errors = map { $_->{property} . ': '. $_->{message} } @{$validator->last_errors};
+        die join "\n", "Invalid configuration file $file", @errors, ''; 
     }
-
+=cut
     debug "Using config file $file\n";
 
     for (grep {defined} $etc->{_catmandu}) {

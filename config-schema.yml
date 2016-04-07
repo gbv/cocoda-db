@@ -1,72 +1,69 @@
 ---
 description: JSON Schema of cocoda-db config file
 type: object
+required: 
+    - limit
+    - endpoints
 properties:
 
     port:
-        required: 0
         type: array
         items:
             - type: string
 
     limit:
-        required: 1
         type: object
+        required:
+            - default
+            - max
         properties:
             default:
-                required: 1
                 type: integer
                 minimum: 1
             max:
-                required: 1
                 type: integer
                 minimum: 1
 
     title:
-        required: 0
         type: string
 
     endpoints:
-        required: 1
         type: object
         additionalProperties: false
         properties:
             concepts:
-                required: 0
                 type: object
+                required:
+                    - href
                 properties:
                     href:
-                        required: 1
                         type: string
                     title:
-                        required: 0
                         type: string
             schemes:
-                required: 0
                 type: object
+                required:
+                    - href
                 properties:
                     href:
-                        required: 1
                         type: string
                     title:
-                        required: 0
                         type: string
             types:
-                required: 0
                 type: object
+                required:
+                    - href
                 properties:
                     href:
-                        required: 1
                         type: string
                     title:
-                        required: 0
                         type: string
             mappings:
-                required: 0
                 type: object
+                required:
+                    - href
                 properties:
                     href:
-                        required: 1
                         type: string
                     title:
                         required: 0
@@ -74,6 +71,5 @@ properties:
 
     # catmandu config path
     catmandu:
-        required: 0
         type: string
 

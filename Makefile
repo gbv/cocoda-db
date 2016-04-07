@@ -40,7 +40,7 @@ package: debian/$(PACKAGE).1 version tests
 # install required toolchain and Debian packages
 dependencies:
 	apt-get install fakeroot dpkg-dev debhelper
-	apt-get install pandoc libghc-citeproc-hs-data 
+	apt-get install pandoc
 	apt-get install $(DEPENDS)
 
 # install required Perl packages
