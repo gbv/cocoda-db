@@ -29,15 +29,47 @@ my @endpoints = qw(concepts schemes types mappings);
     is_deeply decode_json($res->content), $expect, 'got back schemes';
 }
 
+
+my $in = importer('JSKOS', file => 'examples/jskos-concepts.json')->to_array;
+store('concepts')->add_many($in);
+
 {
-    my $in = importer('JSKOS', file => 'examples/jskos-concepts.json')->to_array;
-    store('concepts')->add_many($in);
     my $res = $app->request(GET "/c");
 
-    ok decode_json($res->content);
+    ok my $jskos = decode_json($res->content), 'got back concepts';
+    is @$jskos, 2, 'got back 2 concepts';
+     
+    is $res->header('X-Total-Count'), 3, 'X-Total-Count header';
 
-    # TODO: Test expansion etc.
-    # TODO: Test pagination and link header
+    if(0) {    # FIXME
+    is $res->header('Link'), 
+        '<http://localhost/?page=2>; rel="next", <http://localhost/?page=2>; rel="last"',
+        'Link header';
+
+    $res = $app->request(GET "/c?page=2");
+
+    is $res->header('Link'), 
+        '<http://localhost/?page=1>; rel="first", <http://localhost/?page=1>; rel="prev", <http://localhost/?page=2>; rel="last"',
+        'Link header (page=2)';
+    }
+}
+
+{
+    my $res = $app->request(GET "/c?uri=http://example.org/concept/2&unique=1");
+    my $jskos = decode_json($res->content);
+    is_deeply $jskos->{narrower}, [{
+         notation => [ 'C' ],
+         uri => 'http://example.org/concept/3'
+       }], 'got expanded by uri with unique';
+}
+
+{
+    my $res = $app->request(GET "/c?notation=A");
+    is $res->header('X-Total-Count'), 1, 'got by notation';
+
+#    $res = $app->request(GET "/c?broader=http://example.org/concept/2");
+#    is $res->header('X-Total-Count'), 1, 'got by broader';
+#    note $res->content;
 }
 
 # clean up

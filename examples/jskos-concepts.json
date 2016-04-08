@@ -1,15 +1,17 @@
 {
     "uri": "http://example.org/concept/1",    
-    "inScheme": ["http://example.org/scheme"],
+    "inScheme": [ { "uri":"http://example.org/scheme" } ],
     "notation": ["A"]
 }
 {
     "uri": "http://example.org/concept/2",
-    "inScheme": ["http://example.org/scheme"],
-    "notation": ["B"]
+    "inScheme": [ { "uri":"http://example.org/scheme" } ],
+    "notation": ["B"],
+    "broader": [ { "uri": "http://example.org/concept/1" } ]
 }
 {
     "uri": "http://example.org/concept/3",
-    "inScheme": ["http://example.org/scheme"],
-    "notation": ["C"]
+    "inScheme": [ { "uri":"http://example.org/scheme" } ],
+    "notation": ["C"],
+    "broader": [ { "uri": "http://example.org/concept/2" } ]
 }

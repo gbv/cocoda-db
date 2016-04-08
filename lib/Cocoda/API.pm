@@ -18,6 +18,8 @@ our $CONCEPT_SEARCH_FIELDS = {
     # TODO: note (any kind of note)
     scheme         => 'inScheme.uri',
     schemeNotation => 'inScheme.notation',
+    broader        => 'broader.uri',
+    narrower       => 'narrower.uri',
 };
 
 my $jskos_export_fix = do 'fixes/jskos-export.pl';
@@ -146,6 +148,32 @@ sub answer_query { # TODO: move to another module
     # filter to requested object properties    
     # TODO: use MongoDB projection instead (?)
     $hits = filter_properties($hits);
+
+    # expand a single object
+    if ($fields->{uri} and $hits->first) {
+        my $item = $hits->first;
+        my $uri  = $item->{uri};
+        debug "expanding $uri";
+
+        if (!$item->{narrower}) {
+            $item->{narrower} = [ ];
+            my $narrowerHits = $bag->search(
+                query => { 'broader.uri' => $uri },
+                limit => 100, # TODO
+            );
+            $narrowerHits->each(sub {
+                my $narrower = shift;
+                my $n = { };
+                foreach my $field (qw(uri prefLabel notation)) {
+                    $n->{$field} = $narrower->{$field} if defined $narrower->{$field};
+                }
+                push @{$item->{narrower}}, $n;
+            });
+            # TODO: if more than 100
+            # TODO: keep empty array for concepts only
+            delete $item->{narrower} unless @{$item->{narrower}};
+        }
+    }
 
     # TODO: implement 'list' modifier
     # TODO: JSKOS expansion and normalization

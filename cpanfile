@@ -1,4 +1,4 @@
-requires 'Catmandu', '>=0.94, !=0.9401'; # libcatmandu-perl
+requires 'Catmandu', '0.95';             # libcatmandu-perl
 requires 'Dancer', '1.3114';             # libdancer-perl
  requires 'JSON', '2.90'; # https://rt.cpan.org/Public/Bug/Display.html?id=90589
 requires 'Starman', '0.4008';            # libstarman-perl
