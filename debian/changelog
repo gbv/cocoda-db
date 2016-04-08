@@ -1,3 +1,11 @@
+cocoda-db (0.0.6) UNRELEASED; urgency=medium
+
+  * Change to JSKOS 0.1.0 format
+  * Add X-JSKOS-API-VERSION header
+  * Expand narrower concepts if concept requested by uri
+
+ -- Jakob Voß <jakob.voss@gbv.de>  Fri, 08 Apr 2016 13:32:24 +0200
+
 cocoda-db (0.0.5) unstable; urgency=medium
 
   * Fixed bug in startup script
