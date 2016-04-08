@@ -8,7 +8,7 @@ use Catmandu '-load';
 use Cocoda::API::Modifiers;
 
 our $VERSION="0.0.5";
-our $JSKOSAPI="0.1.0";
+our $JSKOS_API_VERSION="0.0.0";
 
 our $CONCEPT_SEARCH_FIELDS = {
     map { $_ => $_ } qw(
@@ -27,7 +27,7 @@ sub service_description {
 
     return {
         version  => $VERSION,
-        jskosapi => $JSKOSAPI,
+        jskosapi => $JSKOS_API_VERSION,
         CONFIG(title => 'title'),
         map {
             $_ => {
@@ -153,6 +153,13 @@ sub answer_query { # TODO: move to another module
     return_paginated($query, $hits, $jskos_export_fix);
 }
 
+### Common headers
+
+hook before_serializer => sub {
+    header 'X-JSKOS-API-Version' => $JSKOS_API_VERSION;
+    my $link = request->base; # TODO: URI template
+    header('Link-Template', "<$link>; rel=\"search\"" );
+};
 
 ### Logging and error handling
 

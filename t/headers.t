@@ -14,6 +14,7 @@ like $res->header('Content-Type'),
     qr{^application/json(; charset=utf-8)?$}, 'Content-Type';
 
 ok $res->header('ETag'), 'ETag';
+like $res->header('X-JSKOS-API-VERSION'), qr{^\d+\.\d\.\d$}, 'X-JSKOS-API-VERSION';
 
 # HEAD
 $res = $app->request(HEAD '/');
