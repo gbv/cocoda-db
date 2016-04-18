@@ -72,6 +72,11 @@ store('concepts')->add_many($in);
 #    note $res->content;
 }
 
+{
+    my $res = $app->request(GET "/c?topConceptOf=http://example.org/scheme");
+    is $res->header('X-Total-Count'), 2, 'retrieve via topConceptOf';
+}
+
 # clean up
 Catmandu->store($_)->delete_all for @endpoints;
 

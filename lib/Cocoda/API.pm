@@ -5,24 +5,23 @@ use Dancer ':syntax';
 use Cocoda::DB::Config;
 use Catmandu '-load';
 
-use Cocoda::API::Modifiers;
+use Cocoda::API::Query;
 
 our $VERSION="0.0.6";
 our $JSKOS_API_VERSION="0.0.0";
 
 our $CONCEPT_SEARCH_FIELDS = {
-    map { $_ => $_ } qw(
+    (map { $_ => $_ } qw(
         uri type prefLabel altLabel hiddenLabel notation broader narrower related
-    ),
+    )),
     # TODO: label (any of prefLabel, altLabel, hiddenLabel)
     # TODO: note (any kind of note)
     scheme         => 'inScheme.uri',
+    topConceptOf   => 'topConceptOf.uri',
     schemeNotation => 'inScheme.notation',
     broader        => 'broader.uri',
     narrower       => 'narrower.uri',
 };
-
-my $jskos_export_fix = do 'fixes/jskos-export.pl';
 
 sub service_description {
     my (@endpoints) = @_ ? @_ : qw(concepts schemes mappings types);
@@ -52,29 +51,30 @@ options '/' => sub {
     return service_description;
 };    
 
+
 my %endpoints = (
     concepts => sub {
         state $bag = Catmandu->store('concepts')->bag;
-        answer_query( $CONCEPT_SEARCH_FIELDS, $bag );
+        state $builder = query_builder($CONCEPT_SEARCH_FIELDS);
+        answer_query( $builder->(), $bag );
     },
     schemes => sub {
         state $bag = Catmandu->store('schemes')->bag;
-        my $fields = {
-            map { $_ => $_ } 
+        state $builder = query_builder( {
+            map { $_ => $_ }
             qw(uri type prefLabel altLabel hiddenLabel notation),
             # TODO: label (any of prefLabel, altLabel, hiddenLabel)
-        };
-        answer_query( $fields, $bag );
+        } );
+        answer_query( $builder->(), $bag );
     },
     types => sub {
         state $bag = Catmandu->store('types')->bag;
-        answer_query( $CONCEPT_SEARCH_FIELDS, $bag );
+        state $builder = query_builder($CONCEPT_SEARCH_FIELDS);
+        answer_query( $builder->(), $bag );
     },
     mappings => sub {
         state $bag = Catmandu->store('mappings')->bag;
-
-        # query fields
-        my $fields = {
+        state $builder = query_builder( { 
             fromScheme         => 'from.inScheme.uri',
             toScheme           => 'to.inScheme.uri',
             fromSchemeNotation => 'from.inScheme.notation',
@@ -92,8 +92,8 @@ my %endpoints = (
                 dateAccepted
                 dateModified
             ),
-        };
-        answer_query( $fields, $bag );
+        } );
+        answer_query( $builder->(), $bag );
     }
 );
 
@@ -107,78 +107,6 @@ while (my ($name, $sub) = each %endpoints) {
         header('Allow', 'GET, HEAD, OPTIONS');
         return service_description($name);
     };
-}
-
-sub answer_query { # TODO: move to another module
-    my ($fields, $bag) = @_;
-
-    # TODO: language tags
-
-    # collect query fields
-    my $query = {};
-    foreach (keys %$fields) {
-        next unless defined param $_;
-        $query->{ $fields->{$_} } = param $_;
-    }
-
-    # search given bag with pagination
-    my $hits = do {
-        no warnings 'numeric', 'uninitialized';
-        my $page   = int(param 'page') || 1;
-        $page = 1 if $page < 1;
-
-        my $limit  = int(param 'limit') || CONFIG('limit.default');
-        $limit = 1 if $limit < 1;
-
-        if (param 'unique') {
-            $limit = 2;
-        } else {
-            my $max = CONFIG('limit.max');
-            $limit = $max if $max and $limit > $max;
-        }
-
-        # search
-        $bag->search( 
-            query => $query,
-            start => ($page-1)*$limit,
-            limit => $limit,
-        );
-    };
-
-    # filter to requested object properties    
-    # TODO: use MongoDB projection instead (?)
-    $hits = filter_properties($hits);
-
-    # expand a single object
-    if ($fields->{uri} and $hits->first) {
-        my $item = $hits->first;
-        my $uri  = $item->{uri};
-        debug "expanding $uri";
-
-        if (!$item->{narrower}) {
-            $item->{narrower} = [ ];
-            my $narrowerHits = $bag->search(
-                query => { 'broader.uri' => $uri },
-                limit => 100, # TODO
-            );
-            $narrowerHits->each(sub {
-                my $narrower = shift;
-                my $n = { };
-                foreach my $field (qw(uri prefLabel notation)) {
-                    $n->{$field} = $narrower->{$field} if defined $narrower->{$field};
-                }
-                push @{$item->{narrower}}, $n;
-            });
-            # TODO: if more than 100
-            # TODO: keep empty array for concepts only
-            delete $item->{narrower} unless @{$item->{narrower}};
-        }
-    }
-
-    # TODO: implement 'list' modifier
-    # TODO: JSKOS expansion and normalization
-
-    return_paginated($query, $hits, $jskos_export_fix);
 }
 
 ### Common headers

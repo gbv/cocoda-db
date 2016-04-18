@@ -6,12 +6,14 @@
 {
     "uri": "http://example.org/concept/2",
     "inScheme": [ { "uri":"http://example.org/scheme" } ],
+    "topConceptOf": [ { "uri":"http://example.org/scheme" } ],
     "notation": ["B"],
     "broader": [ { "uri": "http://example.org/concept/1" } ]
 }
 {
     "uri": "http://example.org/concept/3",
     "inScheme": [ { "uri":"http://example.org/scheme" } ],
+    "topConceptOf": [ { "uri":"http://example.org/scheme" } ],
     "notation": ["C"],
     "broader": [ { "uri": "http://example.org/concept/2" } ]
 }
