@@ -77,6 +77,14 @@ store('concepts')->add_many($in);
     is $res->header('X-Total-Count'), 2, 'retrieve via topConceptOf';
 }
 
+{
+    my $res = $app->request(GET "/c?identifier=bar");
+    is $res->header('X-Total-Count'), 2, 'retrieve via identifier';
+
+    $res = $app->request(GET "/c?identifier=foo");
+    is $res->header('X-Total-Count'), 1, 'retrieve via identifier';
+}
+
 # clean up
 Catmandu->store($_)->delete_all for @endpoints;
 

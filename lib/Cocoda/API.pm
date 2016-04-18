@@ -13,6 +13,7 @@ our $JSKOS_API_VERSION="0.0.0";
 our $CONCEPT_SEARCH_FIELDS = {
     (map { $_ => $_ } qw(
         uri type prefLabel altLabel hiddenLabel notation broader narrower related
+        identifier
     )),
     # TODO: label (any of prefLabel, altLabel, hiddenLabel)
     # TODO: note (any kind of note)
@@ -75,14 +76,15 @@ my %endpoints = (
     mappings => sub {
         state $bag = Catmandu->store('mappings')->bag;
         state $builder = query_builder( { 
-            fromScheme         => 'from.inScheme.uri',
-            toScheme           => 'to.inScheme.uri',
-            fromSchemeNotation => 'from.inScheme.notation',
-            toSchemeNotation   => 'to.inScheme.notation',
+            fromScheme         => 'fromScheme.uri',
+            toScheme           => 'toScheme.uri',
+            fromSchemeNotation => 'fromScheme.notation',
+            toSchemeNotation   => 'toScheme.notation',
             fromNotation       => 'from.members.notation',
             toNotation         => 'to.members.notation',
             from               => 'from.members.uri',
             to                 => 'to.members.uri',
+            type               => 'type',
             map { $_ => $_ } qw(
                 creator 
                 publisher
