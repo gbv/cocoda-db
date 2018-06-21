@@ -1,3 +1,5 @@
+*This application is no longer maintained. See https://github.com/gbv/jskos-server for an alternative!*
+
 # NAME
 
 cocoda-db - Database service implementing JSKOS-API
